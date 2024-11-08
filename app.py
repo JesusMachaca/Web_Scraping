@@ -22,7 +22,7 @@ def index():
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
         
         # Consulta SQL para recuperar datos de la tabla Ofertas
-        query = "SELECT titulo, empresa, ubicacion, requerimientos, enlace FROM ofertas_laborales where titulo like '%pre%' and (requerimientos like '%sistemas%' or requerimientos like '%Sistemas%')"
+        query = "SELECT titulo, empresa, ubicacion, requerimientos, enlace FROM ofertas_laborales where titulo like '%pre%'"
         cursor.execute(query)
         
         # Almacenar resultados en una lista de diccionarios
