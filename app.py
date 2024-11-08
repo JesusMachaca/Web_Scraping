@@ -14,7 +14,6 @@ DB_CONFIG = {
     'port': '5432'
 }
 
-# Ruta principal para mostrar las ofertas de trabajo
 @app.route('/')
 def index():
     # Conexión a la base de datos
@@ -28,9 +27,10 @@ def index():
         
         # Almacenar resultados en una lista de diccionarios
         job_listings = [dict(row) for row in cursor.fetchall()]
+        print("Datos obtenidos de la base de datos:", job_listings)  # Para verificar el contenido de job_listings
         
     except Exception as e:
-        print("Error al conectar con la base de datos:", e)
+        print("Error al conectar con la base de datos o al ejecutar la consulta:", e)
         job_listings = []
         
     finally:
