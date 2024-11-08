@@ -20,7 +20,10 @@
                 <p>Empresa: {{ job['empresa'] }}</p>
                 <p>Ubicación: {{ job['ubicacion'] }}</p>
                 <p>Requerimientos: {{ job['requerimientos'] }}</p>
-                <button>Aplicar</button>
+                <a href="{{ job['enlace'] }}" target="_blank">
+                    <button>Aplicar</button>
+                </a>
+
             </article>
             {% endfor %}
         </section>
