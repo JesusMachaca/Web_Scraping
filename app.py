@@ -24,8 +24,8 @@ def index():
     try:
         connection = psycopg2.connect(**DB_CONFIG)
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        
-        # Consulta base: Solo las ofertas que cumplen con los requisitos iniciales
+
+        # Base de consulta
         query = """
             SELECT titulo, empresa, ubicacion, requerimientos, enlace, tipo_jornada 
             FROM ofertas_laborales 
@@ -34,23 +34,36 @@ def index():
                 AND lower(requerimientos) LIKE '%sistemas%'
         """
         filters = []
-        
-        # Aplicar filtros adicionales si están presentes
-        if selected_empresa:
-            query += " AND lower(empresa) ILIKE '%s'"
-            filters.append(f"%{selected_empresa}%")
-        if selected_tipo_jornada:
-            query += " AND lower(tipo_jornada) ILIKE '%s'"
-            filters.append(f"%{selected_tipo_jornada}%")
 
-        # Ejecutar consulta con filtros
-        cursor.execute(query, filters)
+        # Caso 1: Sin filtros (Ambos en "Todas")
+        if not selected_empresa and not selected_tipo_jornada:
+            cursor.execute(query)
+        
+        # Caso 2: Solo filtro de empresa
+        elif selected_empresa and not selected_tipo_jornada:
+            query += " AND lower(empresa) = %s"
+            filters.append(selected_empresa)
+            cursor.execute(query, filters)
+        
+        # Caso 3: Solo filtro de tipo_jornada
+        elif not selected_empresa and selected_tipo_jornada:
+            query += " AND lower(tipo_jornada) = %s"
+            filters.append(selected_tipo_jornada)
+            cursor.execute(query, filters)
+        
+        # Caso 4: Ambos filtros activos
+        elif selected_empresa and selected_tipo_jornada:
+            query += " AND lower(empresa) = %s AND lower(tipo_jornada) = %s"
+            filters.extend([selected_empresa, selected_tipo_jornada])
+            cursor.execute(query, filters)
+        
+        # Obtener resultados de la consulta
         job_listings = [dict(row) for row in cursor.fetchall()]
 
-        # Obtener opciones únicas para los campos de filtrado
+        # Consulta para obtener opciones únicas de los filtros
         cursor.execute("SELECT DISTINCT lower(empresa) FROM ofertas_laborales WHERE empresa IS NOT NULL")
         empresas = [row[0] for row in cursor.fetchall()]
-        
+
         cursor.execute("SELECT DISTINCT lower(tipo_jornada) FROM ofertas_laborales WHERE tipo_jornada IS NOT NULL")
         tipo_jornadas = [row[0] for row in cursor.fetchall()]
         
