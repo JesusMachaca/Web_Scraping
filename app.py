@@ -37,10 +37,10 @@ def index():
         
         # Aplicar filtros adicionales si están presentes
         if selected_empresa:
-            query += " AND lower(empresa) ILIKE %s"
+            query += " AND lower(empresa) ILIKE '%s'"
             filters.append(f"%{selected_empresa}%")
         if selected_tipo_jornada:
-            query += " AND lower(tipo_jornada) ILIKE %s"
+            query += " AND lower(tipo_jornada) ILIKE '%s'"
             filters.append(f"%{selected_tipo_jornada}%")
 
         # Ejecutar consulta con filtros
