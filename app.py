@@ -17,15 +17,15 @@ DB_CONFIG = {
 @app.route('/', methods=['GET', 'POST'])
 def index():
     # Obtención de filtros desde el formulario
-    selected_empresa = request.form.get('empresa', '').lower()
-    selected_tipo_jornada = request.form.get('tipo_jornada', '').lower()
+    selected_empresa = request.form.get('empresa', '').strip().lower()
+    selected_tipo_jornada = request.form.get('tipo_jornada', '').strip().lower()
     
     # Conexión a la base de datos
     try:
         connection = psycopg2.connect(**DB_CONFIG)
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
         
-        # Consulta base con condiciones dinámicas
+        # Consulta base: Solo las ofertas que cumplen con los requisitos iniciales
         query = """
             SELECT titulo, empresa, ubicacion, requerimientos, enlace, tipo_jornada 
             FROM ofertas_laborales 
@@ -35,25 +35,23 @@ def index():
         """
         filters = []
         
-        # Aplicar filtros de empresa y tipo_jornada si están presentes
+        # Aplicar filtros adicionales si están presentes
         if selected_empresa:
-            query += " AND lower(empresa) = %s"
-            filters.append(selected_empresa)
+            query += " AND lower(empresa) ILIKE %s"
+            filters.append(f"%{selected_empresa}%")
         if selected_tipo_jornada:
-            query += " AND lower(tipo_jornada) = %s"
-            filters.append(selected_tipo_jornada)
-        
-        # Ejecutar la consulta con los filtros
+            query += " AND lower(tipo_jornada) ILIKE %s"
+            filters.append(f"%{selected_tipo_jornada}%")
+
+        # Ejecutar consulta con filtros
         cursor.execute(query, filters)
-        
-        # Almacenar resultados en una lista de diccionarios
         job_listings = [dict(row) for row in cursor.fetchall()]
-        
-        # Obtener valores únicos para los campos de filtrado
-        cursor.execute("SELECT DISTINCT lower(empresa) FROM ofertas_laborales")
+
+        # Obtener opciones únicas para los campos de filtrado
+        cursor.execute("SELECT DISTINCT lower(empresa) FROM ofertas_laborales WHERE empresa IS NOT NULL")
         empresas = [row[0] for row in cursor.fetchall()]
         
-        cursor.execute("SELECT DISTINCT lower(tipo_jornada) FROM ofertas_laborales")
+        cursor.execute("SELECT DISTINCT lower(tipo_jornada) FROM ofertas_laborales WHERE tipo_jornada IS NOT NULL")
         tipo_jornadas = [row[0] for row in cursor.fetchall()]
         
     except Exception as e:
