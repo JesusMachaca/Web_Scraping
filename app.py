@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import psycopg2
 import psycopg2.extras
 
@@ -14,23 +14,53 @@ DB_CONFIG = {
     'port': '5432'
 }
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
+    # Obtención de filtros desde el formulario
+    selected_empresa = request.form.get('empresa', '').lower()
+    selected_tipo_jornada = request.form.get('tipo_jornada', '').lower()
+    
     # Conexión a la base de datos
     try:
         connection = psycopg2.connect(**DB_CONFIG)
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
         
-        # Consulta SQL para recuperar datos de la tabla Ofertas
-        query = "SELECT titulo, empresa, ubicacion, requerimientos, enlace FROM ofertas_laborales where (lower(titulo) like '%pre%' or lower(requerimientos) like '%estudiante%') and lower(requerimientos) like '%sistemas%'"
-        cursor.execute(query)
+        # Consulta base con condiciones dinámicas
+        query = """
+            SELECT titulo, empresa, ubicacion, requerimientos, enlace, tipo_jornada 
+            FROM ofertas_laborales 
+            WHERE 
+                (lower(titulo) LIKE '%pre%' OR lower(requerimientos) LIKE '%estudiante%')
+                AND lower(requerimientos) LIKE '%sistemas%'
+        """
+        filters = []
+        
+        # Aplicar filtros de empresa y tipo_jornada si están presentes
+        if selected_empresa:
+            query += " AND lower(empresa) = %s"
+            filters.append(selected_empresa)
+        if selected_tipo_jornada:
+            query += " AND lower(tipo_jornada) = %s"
+            filters.append(selected_tipo_jornada)
+        
+        # Ejecutar la consulta con los filtros
+        cursor.execute(query, filters)
         
         # Almacenar resultados en una lista de diccionarios
         job_listings = [dict(row) for row in cursor.fetchall()]
         
+        # Obtener valores únicos para los campos de filtrado
+        cursor.execute("SELECT DISTINCT lower(empresa) FROM ofertas_laborales")
+        empresas = [row[0] for row in cursor.fetchall()]
+        
+        cursor.execute("SELECT DISTINCT lower(tipo_jornada) FROM ofertas_laborales")
+        tipo_jornadas = [row[0] for row in cursor.fetchall()]
+        
     except Exception as e:
         print("Error al conectar con la base de datos o al ejecutar la consulta:", e)
         job_listings = []
+        empresas = []
+        tipo_jornadas = []
         
     finally:
         # Cerrar conexión
@@ -38,7 +68,14 @@ def index():
         connection.close()
     
     # Renderizar plantilla HTML con los datos
-    return render_template('index.html', job_listings=job_listings)
+    return render_template(
+        'index.html', 
+        job_listings=job_listings, 
+        empresas=empresas, 
+        tipo_jornadas=tipo_jornadas,
+        selected_empresa=selected_empresa,
+        selected_tipo_jornada=selected_tipo_jornada
+    )
 
 # Iniciar la aplicación
 if __name__ == "__main__":
