@@ -13,7 +13,6 @@
     </header>
 
     <main>
-        <!-- Formulario de Filtros -->
         <section class="filters">
             <form method="POST" action="{{ url_for('index') }}">
                 <label for="empresa">Empresa:</label>
@@ -25,7 +24,7 @@
                         </option>
                     {% endfor %}
                 </select>
-
+        
                 <label for="tipo_jornada">Tipo de Jornada:</label>
                 <select name="tipo_jornada" id="tipo_jornada">
                     <option value="">Todas</option>
@@ -35,26 +34,30 @@
                         </option>
                     {% endfor %}
                 </select>
-
+        
                 <button type="submit">Filtrar</button>
             </form>
         </section>
-
-        <!-- Listado de Ofertas -->
+        
         <section class="job-listing">
-            {% for job in job_listings %}
-            <article class="job-item">
-                <h2>{{ job['titulo'] }}</h2>
-                <p>Empresa: {{ job['empresa'] }}</p>
-                <p>Ubicación: {{ job['ubicacion'] }}</p>
-                <p>Requerimientos: {{ job['requerimientos'] }}</p>
-                <p>Tipo de Jornada: {{ job['tipo_jornada'] }}</p>
-                <a href="{{ job['enlace'] }}" target="_blank">
-                    <button>Aplicar</button>
-                </a>
-            </article>
-            {% endfor %}
+            {% if job_listings %}
+                {% for job in job_listings %}
+                    <article class="job-item">
+                        <h2>{{ job['titulo'] }}</h2>
+                        <p>Empresa: {{ job['empresa'] }}</p>
+                        <p>Ubicación: {{ job['ubicacion'] }}</p>
+                        <p>Requerimientos: {{ job['requerimientos'] }}</p>
+                        <p>Tipo de Jornada: {{ job['tipo_jornada'] }}</p>
+                        <a href="{{ job['enlace'] }}" target="_blank">
+                            <button>Aplicar</button>
+                        </a>
+                    </article>
+                {% endfor %}
+            {% else %}
+                <p>No se encontraron ofertas laborales con los filtros aplicados.</p>
+            {% endif %}
         </section>
+
     </main>
 
     <footer>
