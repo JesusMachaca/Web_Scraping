@@ -15,49 +15,33 @@
     <main>
         <section class="filters">
             <form method="POST" action="{{ url_for('index') }}">
-                <label for="empresa">Empresa:</label>
-                <select name="empresa" id="empresa">
-                    <option value="">Todas</option>
-                    {% for empresa in empresas %}
-                        <option value="{{ empresa }}" {% if empresa == selected_empresa %}selected{% endif %}>
-                            {{ empresa.capitalize() }}
-                        </option>
-                    {% endfor %}
-                </select>
+                <div class="filter-group">
+                    <label for="empresa">Empresa:</label>
+                    <select name="empresa" id="empresa">
+                        <option value="">Todas</option>
+                        {% for empresa in empresas %}
+                            <option value="{{ empresa }}" {% if empresa == selected_empresa %}selected{% endif %}>
+                                {{ empresa.capitalize() }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
         
-                <label for="tipo_jornada">Tipo de Jornada:</label>
-                <select name="tipo_jornada" id="tipo_jornada">
-                    <option value="">Todas</option>
-                    {% for tipo in tipo_jornadas %}
-                        <option value="{{ tipo }}" {% if tipo == selected_tipo_jornada %}selected{% endif %}>
-                            {{ tipo.capitalize() }}
-                        </option>
-                    {% endfor %}
-                </select>
+                <div class="filter-group">
+                    <label for="tipo_jornada">Modalidad:</label>
+                    <select name="tipo_jornada" id="tipo_jornada">
+                        <option value="">Todas</option>
+                        {% for tipo in tipo_jornadas %}
+                            <option value="{{ tipo }}" {% if tipo == selected_tipo_jornada %}selected{% endif %}>
+                                {{ tipo.capitalize() }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
         
-                <button type="submit">Filtrar</button>
+                <button type="submit" class="filter-button">Filtrar</button>
             </form>
         </section>
-
-        <section class="job-listing">
-            {% if job_listings %}
-                {% for job in job_listings %}
-                    <article class="job-item">
-                        <h2>{{ job['titulo'] }}</h2>
-                        <p>Empresa: {{ job['empresa'] }}</p>
-                        <p>Ubicación: {{ job['ubicacion'] }}</p>
-                        <p>Requerimientos: {{ job['requerimientos'] }}</p>
-                        <p>Tipo de Jornada: {{ job['tipo_jornada'] }}</p>
-                        <a href="{{ job['enlace'] }}" target="_blank">
-                            <button>Aplicar</button>
-                        </a>
-                    </article>
-                {% endfor %}
-            {% else %}
-                <p>No se encontraron ofertas laborales con los filtros aplicados.</p>
-            {% endif %}
-        </section>
-
     </main>
 
     <footer>
