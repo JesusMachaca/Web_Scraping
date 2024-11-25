@@ -1,3 +1,19 @@
+import os
+from flask import Flask, render_template
+import psycopg2
+import psycopg2.extras
+
+app = Flask(__name__)
+
+# Configuración de conexión a la base de datos PostgreSQL
+DB_CONFIG = {
+    'dbname': 'bd_ofertas',
+    'user': 'user',
+    'password': 'i3QtlW963o6QQtlWfqAEB2O5b14vBdQq',
+    'host': 'dpg-csls2l1u0jms73d1c72g-a.oregon-postgres.render.com',
+    'port': '5432'
+}
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     selected_empresa = request.form.get('empresa', '').strip().lower()
