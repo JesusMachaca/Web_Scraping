@@ -41,45 +41,48 @@ main {
 
 /* Sección de filtros */
 .filters {
-    width: 60%; /* Ancho del contenedor de filtros */
-    max-width: 800px;
-    margin-bottom: 2rem; /* Separar los filtros de las ofertas */
+    width: 80%; /* Ancho del contenedor */
+    max-width: 1000px; /* Limitar el ancho máximo */
+    margin: 0 auto 2rem auto; /* Centrar y agregar separación con las ofertas */
     padding: 1rem;
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: flex; /* Cambiamos a flex para alinear en fila */
-    justify-content: space-between; /* Distribuimos los filtros horizontalmente */
-    align-items: center; /* Centramos verticalmente */
-    gap: 1rem; /* Espaciado entre elementos */
+    display: flex; /* Alineamos los elementos en fila */
+    gap: 1rem; /* Espaciado entre los filtros */
+    flex-wrap: wrap; /* Permitir que los filtros bajen si hay poco espacio */
+    justify-content: space-between; /* Distribuir espacio uniformemente */
+    align-items: center; /* Alinear los elementos verticalmente */
 }
 
-/* Ajustes de grupo de filtros */
+/* Grupo de filtros individuales */
 .filter-group {
-    flex: 1; /* Hacemos que cada grupo ocupe espacio proporcional */
+    flex: 1; /* Hacer que cada filtro ocupe espacio proporcional */
+    min-width: 150px; /* Ancho mínimo para evitar colapsos */
+    max-width: 200px; /* Ancho máximo de cada filtro */
     display: flex;
     flex-direction: column;
     align-items: flex-start; /* Alinear contenido al inicio del grupo */
 }
 
-/* Etiquetas */
+/* Etiquetas de filtros */
 .filter-group label {
     font-size: 0.9rem;
     color: #555;
     margin-bottom: 0.4rem;
+    display: block;
 }
 
 /* Selectores */
 .filter-group select {
     width: 100%; /* Ancho completo dentro del grupo */
-    max-width: 200px; /* Limitar el ancho máximo */
     padding: 0.5rem;
     font-size: 0.9rem;
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #f9f9f9;
     transition: border-color 0.3s;
-    text-align: center; /* Centrar texto dentro del selector */
+    text-align: center;
 }
 
 /* Hover en selectores */
