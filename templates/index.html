@@ -24,36 +24,24 @@
                         <option value="">TODAS</option>
                     </select>
                 </div>
-
                 <div class="filter-group">
-                    <label for="tipo_jornada">Modalidad:</label>
-                    <select name="tipo_jornada" id="tipo_jornada">
+                    <label for="modalidad">Modalidad:</label>
+                    <select name="modalidad" id="modalidad">
                         <option value="">TODAS</option>
                     </select>
                 </div>
-
-                <button type="button" class="filter-button">Filtrar</button>
+                <div class="filter-group">
+                    <label for="area">Área:</label>
+                    <select name="area" id="area">
+                        <option value="">TODAS</option>
+                    </select>
+                </div>
+                <div>
+                    <button type="button" class="filter-button">Filtrar</button>
+                </div>
             </form>
         </section>
 
-        <!-- Listado de ofertas laborales -->
-        <section class="job-listing">
-            {% if job_listings %}
-                {% for job in job_listings %}
-                    <article class="job-item">
-                        <h2>{{ job['titulo'] }}</h2>
-                        <p><strong>Empresa:</strong> {{ job['empresa'] }}</p>
-                        <p><strong>Ubicación:</strong> {{ job['ubicacion'] }}</p>
-                        <p><strong>Requerimientos:</strong> {{ job['requerimientos'] }}</p>
-                        <a href="{{ job['enlace'] }}" target="_blank">
-                            <button>Aplicar</button>
-                        </a>
-                    </article>
-                {% endfor %}
-            {% else %}
-                <p>No se encontraron ofertas laborales disponibles.</p>
-            {% endif %}
-        </section>
     </main>
 
     <!-- Pie de página -->
