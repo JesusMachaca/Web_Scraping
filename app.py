@@ -10,7 +10,7 @@ DB_CONFIG = {
     'dbname': 'bd_ofertas',
     'user': 'user',
     'password': 'i3QtlW963o6QQtlWfqAEB2O5b14vBdQq',
-    'host': 'dpg-csls2l1c72g-a.oregon-postgres.render.com',
+    'host': 'dpg-csls2l1u0jms73d1c72g-a.oregon-postgres.render.com',
     'port': '5432'
 }
 
@@ -21,33 +21,23 @@ def index():
         connection = psycopg2.connect(**DB_CONFIG)
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
         
-        # Consulta base para recuperar todas las ofertas
-        query = """
-            SELECT 
-                titulo, empresa, ubicacion, requerimientos, enlace 
-            FROM 
-                ofertas_laborales 
-            WHERE 
-                (lower(titulo) LIKE '%pre%' OR lower(requerimientos) LIKE '%estudiante%') 
-                AND lower(requerimientos) LIKE '%sistemas%'
-        """
+        # Consulta SQL para recuperar datos de la tabla Ofertas
+        query = "SELECT titulo, empresa, ubicacion, requerimientos, enlace FROM ofertas_laborales where (lower(titulo) like '%pre%' or lower(requerimientos) like '%estudiante%') and lower(requerimientos) like '%sistemas%'"
         cursor.execute(query)
         
-        # Convertir los resultados en una lista de diccionarios
+        # Almacenar resultados en una lista de diccionarios
         job_listings = [dict(row) for row in cursor.fetchall()]
         
     except Exception as e:
         print("Error al conectar con la base de datos o al ejecutar la consulta:", e)
-        job_listings = []  # En caso de error, se retorna una lista vacía
+        job_listings = []
         
     finally:
-        # Asegurar cierre de cursor y conexión
-        if cursor:
-            cursor.close()
-        if connection:
-            connection.close()
+        # Cerrar conexión
+        cursor.close()
+        connection.close()
     
-    # Renderizar la plantilla HTML con los datos obtenidos
+    # Renderizar plantilla HTML con los datos
     return render_template('index.html', job_listings=job_listings)
 
 # Iniciar la aplicación
