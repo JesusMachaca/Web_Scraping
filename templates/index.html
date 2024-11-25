@@ -7,45 +7,58 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <!-- Encabezado -->
     <header>
         <h1>Prácticas Pre Profesionales en Ingeniería de Sistemas</h1>
         <p>Encuentra el trabajo que estás buscando</p>
     </header>
 
+    <!-- Contenido principal -->
     <main>
+        <!-- Sección de filtros (sin funcionalidad) -->
         <section class="filters">
-            <form method="POST" action="{{ url_for('index') }}">
+            <form>
                 <div class="filter-group">
                     <label for="empresa">Empresa:</label>
                     <select name="empresa" id="empresa">
-                        <option value="">Todas</option>
-                        {% for empresa in empresas %}
-                            <option value="{{ empresa }}" {% if empresa == selected_empresa %}selected{% endif %}>
-                                {{ empresa.capitalize() }}
-                            </option>
-                        {% endfor %}
+                        <option value="">TODAS</option>
                     </select>
                 </div>
-        
+
                 <div class="filter-group">
                     <label for="tipo_jornada">Modalidad:</label>
                     <select name="tipo_jornada" id="tipo_jornada">
-                        <option value="">Todas</option>
-                        {% for tipo in tipo_jornadas %}
-                            <option value="{{ tipo }}" {% if tipo == selected_tipo_jornada %}selected{% endif %}>
-                                {{ tipo.capitalize() }}
-                            </option>
-                        {% endfor %}
+                        <option value="">TODAS</option>
                     </select>
                 </div>
-        
-                <button type="submit" class="filter-button">Filtrar</button>
+
+                <button type="button" class="filter-button">Filtrar</button>
             </form>
+        </section>
+
+        <!-- Listado de ofertas laborales -->
+        <section class="job-listing">
+            {% if job_listings %}
+                {% for job in job_listings %}
+                    <article class="job-item">
+                        <h2>{{ job['titulo'] }}</h2>
+                        <p><strong>Empresa:</strong> {{ job['empresa'] }}</p>
+                        <p><strong>Ubicación:</strong> {{ job['ubicacion'] }}</p>
+                        <p><strong>Requerimientos:</strong> {{ job['requerimientos'] }}</p>
+                        <a href="{{ job['enlace'] }}" target="_blank">
+                            <button>Aplicar</button>
+                        </a>
+                    </article>
+                {% endfor %}
+            {% else %}
+                <p>No se encontraron ofertas laborales disponibles.</p>
+            {% endif %}
         </section>
     </main>
 
+    <!-- Pie de página -->
     <footer>
-        <p>&copy; 2024 Practicas Pre Profesionales - Ingeniería de Sistemas</p>
+        <p>&copy; 2024 Prácticas Pre Profesionales - Ingeniería de Sistemas</p>
     </footer>
 </body>
 </html>
