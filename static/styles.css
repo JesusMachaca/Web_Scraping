@@ -42,7 +42,7 @@ main {
 /* Sección de filtros */
 .filters {
     width: 60%; /* Ancho del contenedor de filtros */
-    max-width: 800px; /* Limitar el ancho máximo */
+    max-width: 800px;
     margin-bottom: 2rem; /* Separar los filtros de las ofertas */
     padding: 1rem;
     background-color: #ffffff;
@@ -51,16 +51,15 @@ main {
     display: flex; /* Cambiamos a flex para alinear en fila */
     justify-content: space-between; /* Distribuimos los filtros horizontalmente */
     align-items: center; /* Centramos verticalmente */
-    gap: 1rem;
+    gap: 1rem; /* Espaciado entre elementos */
 }
 
 /* Ajustes de grupo de filtros */
 .filter-group {
+    flex: 1; /* Hacemos que cada grupo ocupe espacio proporcional */
     display: flex;
     flex-direction: column;
-    min-width: 150px; /* Ajustar ancho mínimo */
-    align-items: flex-start; /* Alinear contenido al inicio */
-    text-align: left;
+    align-items: flex-start; /* Alinear contenido al inicio del grupo */
 }
 
 /* Etiquetas */
@@ -72,13 +71,15 @@ main {
 
 /* Selectores */
 .filter-group select {
+    width: 100%; /* Ancho completo dentro del grupo */
+    max-width: 200px; /* Limitar el ancho máximo */
     padding: 0.5rem;
     font-size: 0.9rem;
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #f9f9f9;
     transition: border-color 0.3s;
-    width: 100%; /* Ocupar todo el espacio del grupo */
+    text-align: center; /* Centrar texto dentro del selector */
 }
 
 /* Hover en selectores */
@@ -96,7 +97,7 @@ main {
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
-    align-self: flex-end; /* Alineamos el botón al final */
+    align-self: center; /* Centrar el botón dentro del contenedor */
 }
 
 .filter-button:hover {
