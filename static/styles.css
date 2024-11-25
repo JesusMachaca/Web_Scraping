@@ -48,20 +48,19 @@ main {
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-wrap: wrap;
+    display: flex; /* Cambiamos a flex para alinear en fila */
+    justify-content: space-between; /* Distribuimos los filtros horizontalmente */
+    align-items: center; /* Centramos verticalmente */
     gap: 1rem;
-    justify-content: center; /* Centrar elementos dentro del contenedor */
 }
 
 /* Ajustes de grupo de filtros */
 .filter-group {
     display: flex;
     flex-direction: column;
-    flex: 1;
     min-width: 150px; /* Ajustar ancho mínimo */
-    align-items: center; /* Centramos el contenido dentro de cada grupo */
-    text-align: center; /* Alineación centrada del texto */
+    align-items: flex-start; /* Alinear contenido al inicio */
+    text-align: left;
 }
 
 /* Etiquetas */
@@ -73,15 +72,13 @@ main {
 
 /* Selectores */
 .filter-group select {
-    width: 100%; /* Ancho del selector */
-    max-width: 200px; /* Limitar el ancho máximo */
     padding: 0.5rem;
     font-size: 0.9rem;
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #f9f9f9;
     transition: border-color 0.3s;
-    text-align: center; /* Centrar texto dentro del selector */
+    width: 100%; /* Ocupar todo el espacio del grupo */
 }
 
 /* Hover en selectores */
@@ -99,6 +96,7 @@ main {
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
+    align-self: flex-end; /* Alineamos el botón al final */
 }
 
 .filter-button:hover {
